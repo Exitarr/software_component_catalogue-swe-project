@@ -1,5 +1,5 @@
 import { createUserService , loginUserService } from "../../service/user.js";
-import { createComponentService , getAllComponentsService , getComponentsOnrequestService } from "../../service/components.js";
+import { componentServices } from '../../service/components.js'
 import { db } from '../../lib/db.js'
 
 const queries = {
@@ -22,12 +22,17 @@ const queries = {
     },
 
     getAllComponents : async () => {
-        const components = await getAllComponentsService();
+        const components = await componentServices.getAllComponentsService();
         return components;
     },
 
+    getComponentbyId : async () => {
+        const component = await componentServices.getComponentbyIdservice();
+        return component
+    },
+
     getComponentsOnrequest : async (parent, args) => {
-        const components = await getComponentsOnrequestService({payload: args});
+        const components = await componentServices.getComponentsOnrequestService({payload: args});
         return components;
     }
 }
@@ -39,8 +44,19 @@ const mutations = {
     },
 
     createComponent : async (parent, args) => {
-        const result = await createComponentService({payload: args});
+        const result = await componentServices.createComponentService({payload: args});
         return result;
+    },
+
+    updateComponent : async (parent, args) => {
+        const result = await componentServices.updateComponentService({payload: args});
+        return result;
+    },
+
+    deleteComponent : async (parent, args) => {
+        const result = await componentServices.deleteComponentService({payload: args});
+        return result;
+
     }
 }
 

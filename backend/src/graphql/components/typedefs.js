@@ -5,6 +5,7 @@ const typeDefs = `#graphql
         name : String!
         email: String!
         password: String!
+        role : String!
         ownedComponents: [Component]
     }
     type Component {

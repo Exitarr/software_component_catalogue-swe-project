@@ -13,6 +13,7 @@ const generateHash = (password, salt) => {
 
 const createUserService = async ({payload}) => {
     const {userName, name, email, password} = payload;
+    
     const salt = randomBytes(16).toString('hex');
 
     const hashedPassword = generateHash(password, salt);

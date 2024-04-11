@@ -12,7 +12,7 @@ const CenteredContainer = styled.div`
 const FormContainer = styled.div`
   display: grid;
   gap: 1rem;
-  width: 500px; /* Adjust width as needed */
+  width: 700px; /* Adjust width as needed */
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -22,7 +22,7 @@ const FormContainer = styled.div`
 const TextContainer = styled.div`
   display: grid;
   gap: 1rem;
-  width: 500px; /* Adjust width as needed */
+  width: 700px; /* Adjust width as needed */
 `;
 
 const Label = styled.label`
@@ -151,4 +151,4 @@ const InputForm = () => {
   );
 };
 
-export default InputForm;
+export  {InputForm};

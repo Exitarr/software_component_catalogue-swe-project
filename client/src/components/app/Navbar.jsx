@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,14 +14,30 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 
+import { useQuery } from '@apollo/client';
+import { queries } from '../../Queries';
+
 const pages = ['store', 'about'];
 
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isUser, setIsUser] = useState(true);
+  
+  const { data } = useQuery(queries.GET_USER);
+
+  useEffect( () => {
+    
+    async function GetUser() {
+      const user = await data;
+      if(user && user.getCurrentUser.role === 'admin') setIsAdmin(true);
+    }
+    
+    GetUser();
+
+  }, []);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -161,12 +177,8 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               
-              <MenuItem key="profile" onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Profile</Typography>
-              </MenuItem>
-
               {isAdmin && <MenuItem key="Dashboard" onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Dashboard</Typography>
+                <Link to='/dashboard' style={{ textDecoration: 'none', color: 'inherit' }}><Typography textAlign="center">Dashboard</Typography></Link>
               </MenuItem>}
 
               <MenuItem key="logout" onClick={handleLogout}>

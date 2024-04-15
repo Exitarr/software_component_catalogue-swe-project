@@ -6,7 +6,6 @@ const typeDefs = `#graphql
         email: String!
         password: String!
         role : String!
-        ownedComponents: [Component]
     }
     type Component {
         id : ID!
@@ -15,7 +14,8 @@ const typeDefs = `#graphql
         framework : String!
         paid : Boolean!
         price : Float
-        content : String!
+        description : String
+        code : String!
     }
 `
 

@@ -32,10 +32,11 @@ model component {
   id String @id @default(uuid())
   name String 
   lang String
-  content String
   framework String
   paid Boolean
   price Float
+  description String
+  code String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   

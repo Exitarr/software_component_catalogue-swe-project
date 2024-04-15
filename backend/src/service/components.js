@@ -13,7 +13,7 @@ const getComponentbyIdservice  = async ({ payload }) =>{
 }
 
 const createComponentService = async ({ payload }) => {
-    const { name , lang, framework , paid , price , content } = payload;
+    const { name , lang, framework , paid , price , description , code } = payload;
     const result = await db.component.create({
         data : {
             name,
@@ -21,7 +21,8 @@ const createComponentService = async ({ payload }) => {
             framework,
             paid,
             price,
-            content
+            description ,
+            code
         }
     })
     return "Component created successfully!";
@@ -48,7 +49,7 @@ const getComponentsOnrequestService = async ({ payload }) => {
 }
 
 const updateComponentService = async ({ payload }) => {
-    const {id , name , lang, framework , paid , price , content } = payload;
+    const {id , name , lang, framework , paid , price , description , code } = payload;
     
     const component = getComponentbyIdservice(id)
     
@@ -62,7 +63,8 @@ const updateComponentService = async ({ payload }) => {
             framework : framework || component.framework,
             paid : paid || component.paid,
             price : price || component.price,
-            content : content || component.content
+            description : description || component.description,
+            code : code || component.code
         }
     })
 

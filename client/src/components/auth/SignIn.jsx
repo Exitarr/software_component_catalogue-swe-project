@@ -13,18 +13,38 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-// TODO remove, this demo shouldn't need to reset the theme.
+import { useMutation } from '@apollo/client';
+import { mutations } from '../../Mutations';
+import { useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const history = useNavigate();
+  
+
+  const [loginUser] = useMutation(mutations.LOGIN_USER);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const formdata = new FormData(event.currentTarget);
+    const payload = {
+      email: formdata.get('email'),
+      password: formdata.get('password')
+    }
+
+    try{
+      const result = await loginUser({ variables : payload });
+      
+      if (result) {
+        const token = result.data.getUserToken;
+        localStorage.setItem('token', token);
+        history('/');
+      }
+    }
+    catch(e){
+      alert('Invalid credentials');
+    }
   };
 
   return (

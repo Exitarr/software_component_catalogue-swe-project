@@ -1,12 +1,8 @@
-import { createUserService , loginUserService } from "../../service/user.js";
+import { createUserService ,updateUserService , loginUserService } from "../../service/user.js";
 import { componentServices } from '../../service/components.js'
 import { db } from '../../lib/db.js'
 
 const queries = {
-    getUserToken : async (parent, args) => {
-        const token = await loginUserService({payload: args});
-        return token;
-    },
 
     getCurrentUser : async (_, parameters , context) => {
         if(context && context.user){
@@ -21,13 +17,18 @@ const queries = {
         else throw new Error("User not found");
     },
 
+    getAllUsers : async () => {
+        const users = await db.user.findMany();
+        return users;
+    },
+
     getAllComponents : async () => {
         const components = await componentServices.getAllComponentsService();
         return components;
     },
 
-    getComponentbyId : async () => {
-        const component = await componentServices.getComponentbyIdservice();
+    getComponentbyId : async (parent, args) => {
+        const component = await componentServices.getComponentbyIdservice({payload : args});
         return component
     },
 
@@ -41,6 +42,16 @@ const mutations = {
     createUser : async (parent, args) => {
         const result = await createUserService({payload: args});
         return result;
+    },
+
+    updateUser : async (parent, args) => {
+        const result = await updateUserService({payload: args});
+        return result;
+    },
+
+    getUserToken : async (parent, args) => {
+        const token = await loginUserService({payload: args});
+        return token;
     },
 
     createComponent : async (parent, args) => {

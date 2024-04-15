@@ -31,6 +31,21 @@ const createUserService = async ({payload}) => {
     return "User created successfully!";
 }
 
+const updateUserService = async ({payload}) => {
+    const { id } = payload;
+
+    const updatedUser = await db.user.update({
+        where : {
+            id
+        },
+        data : {
+            role : 'admin'
+        }
+    })
+
+    return "User updated successfully!";
+}
+
 const loginUserService = async ({payload}) => {
     const { email , password } = payload;
     const user = await db.user.findUnique({
@@ -57,4 +72,4 @@ const decodeJWTtoken = (token) => {
     return JWT.verify(token , JWT_SECRET) ;
 }
 
-export { createUserService , loginUserService  , decodeJWTtoken }
+export { createUserService , updateUserService , loginUserService  , decodeJWTtoken }

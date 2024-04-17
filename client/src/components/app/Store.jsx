@@ -87,8 +87,6 @@ const SectionComponent = ({edit}) => {
   if(loading) return <p>Loading...</p>
   if(error) return <p>Error: {error.message}</p>
 
-  console.log(data);
-
   const components  = data.getComponentsOnrequest;
 
 
@@ -118,7 +116,7 @@ const SectionComponent = ({edit}) => {
             {loading && <p>Loading...</p>}
             {error && <p>Error: ${error.message}</p>}
             {data && components.map((comp) => {
-              return <li><CompCard key={comp.id} comp = {comp}/></li>
+              return <li><CompCard key={comp.id} comp = {comp} edit = {edit}/></li>
             })}
           </ListContainer>
           

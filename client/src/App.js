@@ -12,6 +12,7 @@ import AppBar from './components/dashboard/AppBar';
 import SideBar from './components/dashboard/SideBar';
 import styled from 'styled-components';
 import UserTable from './components/dashboard/UserTable';
+import { EditForm } from './components/dashboard/EditComponent';
 
 const FlexContainer = styled.div`
   display: flex;
@@ -74,8 +75,8 @@ function App() {
               <Route path="/dashboard" element={<DashboardPage />}>
                   <Route path="" element={<Heading>Dashboard SCCS</Heading>} />
                   <Route path="add" element={<InputForm />} />
-                  <Route path="store" element={<Store />}/> 
-                  <Route path="store/page/:id" element = {<InputForm isEdit = {true}/>} />
+                  <Route path="store" element={<Store edit={true}/>}/> 
+                  <Route path="store/page/:id" element = {<EditForm isEdit = {true}/>} />
                   <Route path="users" element = {<UserTable />} />
               </Route>
           </Routes>

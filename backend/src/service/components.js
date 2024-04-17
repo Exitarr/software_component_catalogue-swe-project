@@ -51,20 +51,19 @@ const getComponentsOnrequestService = async ({ payload }) => {
 const updateComponentService = async ({ payload }) => {
     const {id , name , lang, framework , paid , price , description , code } = payload;
     
-    const component = getComponentbyIdservice(id)
     
     const updatedComponent = await db.component.update({
         where : {
-            id : component.id
+            id : id
         },
         data : {
-            name : name || component.name,
-            lang : lang || component.lang,
-            framework : framework || component.framework,
-            paid : paid || component.paid,
-            price : price || component.price,
-            description : description || component.description,
-            code : code || component.code
+            name,
+            lang,
+            framework,
+            paid,
+            price,
+            description ,
+            code
         }
     })
 
@@ -74,11 +73,10 @@ const updateComponentService = async ({ payload }) => {
 const deleteComponentService = async ({ payload }) => {
     const { id } = payload;
 
-    const component = getComponentbyIdservice(id)
 
     await db.component.delete({
         where : {
-            id : component.id
+            id : id
         }
     })
 

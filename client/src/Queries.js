@@ -12,6 +12,18 @@ const GET_USER = gql`
      }
 `
 
+const GET_ALL_USERS = gql`
+    query GetAllUsers{
+        getAllUsers{
+            id
+            userName
+            name
+            email
+            role
+        }
+    }
+`
+
 const GET_STORE_COMPONENTS = gql`
     query GetStoreComponents{
         getAllComponents{
@@ -56,6 +68,7 @@ const GET_COMPONENTS_ON_REQUEST_QUERY = gql`
 
 const queries = {
     GET_USER,
+    GET_ALL_USERS,
     GET_STORE_COMPONENTS,
     GET_COMPONENT_BYID,
     GET_COMPONENTS_ON_REQUEST_QUERY

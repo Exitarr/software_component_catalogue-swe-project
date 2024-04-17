@@ -23,7 +23,7 @@ const pages = ['store', 'about'];
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true);
   const [isUser, setIsUser] = useState(true);
   
   const { data } = useQuery(queries.GET_USER);
@@ -38,6 +38,7 @@ function ResponsiveAppBar() {
     GetUser();
 
   }, []);
+  
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -79,7 +80,7 @@ function ResponsiveAppBar() {
             }}
           >
             <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            DevHelp-UI
+            SCCS
             </Link>
           </Typography>
 
@@ -137,7 +138,7 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            DevHelp-UI
+            SCCS
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (

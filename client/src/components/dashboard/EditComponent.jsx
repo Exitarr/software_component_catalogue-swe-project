@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import styled from 'styled-components';
 import { Editor } from '@monaco-editor/react';
+import { useParams } from 'react-router-dom';
 
-import { useMutation  } from '@apollo/client';
+import { useMutation , useQuery } from '@apollo/client';
+import { queries } from '../../Queries';
 import { mutations } from '../../Mutations';
 import { useNavigate } from 'react-router-dom';
 
@@ -80,41 +82,56 @@ const TextArea = styled.textarea`
 
 
 
-const InputForm = () => {
+const EditForm = ({ isEdit }) => {
 
 
-const programmingLanguages = [
-  "select a Language",
-  "javaScript",
-  "python",
-  "Java",
-  "C++",
-  "Ruby",
-  "Swift",
-  "Go",
-  "TypeScript",
-  "PHP",
-  "Rust"
-];
+  const programmingLanguages = [
+    "javaScript",
+    "python",
+    "Java",
+    "C++",
+    "Ruby",
+    "Swift",
+    "Go",
+    "TypeScript",
+    "PHP",
+    "Rust"
+  ];
 
-const frameworks = [ "select a framework", "React", "Angular", "Vue.js", "Node.js", "Django", "Flask", "Spring Boot", "Ruby on Rails", "Laravel", "SwiftUI", "Express.js", "NestJS", "Gin", "Symfony", "Qt", "Rocket", "Echo", "Hibernate", "Boost", "Actix"];
+const frameworks = [ "React", "Angular", "Vue.js", "Node.js", "Django", "Flask", "Spring Boot", "Ruby on Rails", "Laravel", "SwiftUI", "Express.js", "NestJS", "Gin", "Symfony", "Qt", "Rocket", "Echo", "Hibernate", "Boost", "Actix"];
 
   const history = useNavigate();
-  
-
+  const { id } = useParams();
   const [isPaid, setIsPaid] = useState(false);
-
-  const [createComponent] = useMutation(mutations.CREATE_COMPONENT);
+  const [updateComponent] = useMutation(mutations.UPDATE_COMPONENT);
   
   const [formData, setFormData] = useState({
+    id: id,
     name: '',
     lang: '',
-    framework:'',
+    framework: '',
     paid: false,
     price: 0,
-    description :  '',
-    code:  '',
+    description: '',
+    code: '',
   });
+
+  const { data , loading , error } = useQuery(queries.GET_COMPONENT_BYID, {
+    variables : { id }, 
+  });
+
+  useEffect(() => {
+    if (data) {
+      const { name, lang, framework, paid, price, description, code } = data.getComponentbyId;
+      setFormData({ id, name, lang, framework, paid, price, description, code });
+    }
+  }, [data]);
+
+  if (loading) return <span>Loading...</span>;
+  if (error) return <span>Error: {error.message}</span>;
+
+  
+
 
   const handlePaidChange = (event) => {
     setIsPaid(event.target.value === 'paid');
@@ -126,42 +143,42 @@ const frameworks = [ "select a framework", "React", "Angular", "Vue.js", "Node.j
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       console.log(formData)
-      const result = createComponent({ variables: formData });
+      const result = await updateComponent({ variables: formData });
       console.log(result);
       history('/dashboard');
     } catch (e) {
       console.log(e);
     }
   };
-  
+
   return (
       <CenteredContainer>   
       <FormContainer onSubmit={handleSubmit}>
-        <h1>Add Component</h1>
+        <h1>{isEdit ? 'Edit Component' : 'Add Component'}</h1>
         <DataContainer>
           <Label htmlFor="name">Name:</Label>
           <InputField type="text" id="name" name="name" value={formData.name} onChange={handleInputChange} />
 
           <Label htmlFor="language">Code Language:</Label>
-          <Select id="language" name="language" onChange={(e) => setFormData({ ...formData, lang: e.target.value })}>
+          <Select id="language" name="language" value={formData.lang} onChange={(e) => setFormData({ ...formData, lang: e.target.value })}>
             <option value="select a Language">select a Language</option>
-            {programmingLanguages.map((lang,index) => {
-              return(<option key={index} value={lang}>
-                {lang}
+            {programmingLanguages.map((nlang,index) => {
+              return(<option key={index} value={nlang}>
+                {nlang}
               </option>)
             })}
           </Select>
 
           <Label htmlFor="framework">Framework:</Label>
-          <Select id="framework" name="framework"  onChange={(event) => setFormData({ ...formData, framework: event.target.value })}>
+          <Select id="framework" name="framework" value={formData.framework}  onChange={(event) => setFormData({ ...formData, framework: event.target.value })}>
             <option value="select a framework">select a framework</option>
-            {frameworks.map((framework,index) => {
-              return(<option key={index} value={framework}>
-                {framework}
+            {frameworks.map((nframework,index) => {
+              return(<option key={index} value={nframework}>
+                {nframework}
               </option>)
             })}
           </Select>
@@ -174,7 +191,7 @@ const frameworks = [ "select a framework", "React", "Angular", "Vue.js", "Node.j
                 id="paid"
                 name="payment"
                 value="paid"
-                checked={isPaid}
+                checked={formData.paid}
                 onChange={handlePaidChange}
               />
               Yes
@@ -185,14 +202,14 @@ const frameworks = [ "select a framework", "React", "Angular", "Vue.js", "Node.j
                 id="unpaid"
                 name="payment"
                 value="unpaid"
-                checked={!isPaid}
+                checked={!formData.paid}
                 onChange={handlePaidChange}
               />
               No
             </label>
           </div>
 
-          {isPaid && (
+          {formData.paid && (
             <div>
               <Label htmlFor="price">Price: </Label>
               <InputField type="text" id="price" name="price" value={formData.price} onChange={handleInputChange} />
@@ -208,7 +225,7 @@ const frameworks = [ "select a framework", "React", "Angular", "Vue.js", "Node.j
           <Editor 
                 height= "85vh"
                 theme='vs-dark'
-                defaultLanguage={formData==null ? "javascript" : formData.lang}
+                defaultLanguage={formData.lang}
                 defaultValue="// Write your code here"
                 value={formData.code}
                 onChange={(value) => setFormData({ ...formData, code: value })}
@@ -220,4 +237,4 @@ const frameworks = [ "select a framework", "React", "Angular", "Vue.js", "Node.j
   );
 };
 
-export  {InputForm};
+export  {EditForm};

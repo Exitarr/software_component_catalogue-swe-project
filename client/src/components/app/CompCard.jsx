@@ -7,10 +7,29 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 
-const cmpCard = ({ comp }) => {
+import { useMutation } from '@apollo/client';
+import { mutations } from '../../Mutations';
+
+import { useNavigate } from 'react-router-dom';
+
+
+
+const cmpCard = ({ comp , edit }) => {
+  const history = useNavigate();
+  const [deleteComponent] = useMutation(mutations.DELETE_COMPONENT);
+
   const { id, name, lang, framework, paid, price, description } = comp;
 
-  console.log(comp)
+
+  const handleDelete = async () => {
+    await deleteComponent({
+      variables : {
+        id
+      }
+    })
+
+    history('/dashboard');
+  }
 
   return (
     <Box sx={{ minWidth: 300 }}>
@@ -30,8 +49,11 @@ const cmpCard = ({ comp }) => {
         </CardContent>
         <CardActions>
           <Link to={`page/${id}`}>
-            <Button size="small">Learn More</Button>
+            <Button size="small">{edit ? `Edit`: `Learn More`}</Button>
           </Link>
+          {edit &&
+            <Button size="small" onClick={()=>handleDelete(id)}>DELETE</Button>
+          }
         </CardActions>
       </Card>
     </Box>

@@ -48,7 +48,7 @@ export default function Hero() {
                   theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
               }}
             >
-              DevHelp-UI
+              SCCS
             </Typography>
           </Typography>
           <Typography

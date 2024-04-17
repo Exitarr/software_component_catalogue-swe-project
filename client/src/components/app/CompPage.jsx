@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams} from 'react-router-dom';
 import styled from 'styled-components';
 import { Editor } from '@monaco-editor/react';
@@ -33,11 +34,10 @@ export default function CompPage( props ) {
         variables : { id }, 
     });
 
-    if (loading) return null;
-    if (error) return `Error! ${error}`;
+    if (loading) return <span>loading...</span>
+    if (error) return <span> {error} </span>
 
     const {  name, lang, framework, paid, price, description , code  } = data.getComponentbyId;
-
     console.log(data.getComponentbyId)
 
     return(
@@ -52,14 +52,14 @@ export default function CompPage( props ) {
                     {description}
                 </p>
             </DetailContainer>
-            <Editor 
+            {lang && <Editor 
                 height= "75vh"
                 width= "50%"
                 theme='vs-dark'
-                defaultLanguage="javascript"
+                defaultLanguage={lang}
                 defaultValue={code}
             />
-
+}
             
         </Section>
     )
